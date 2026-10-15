@@ -1,0 +1,10 @@
+{
+  "description": "Streamline your design process with an intuitive platform that allows users to create, collaborate, and share stunning visual projects effortlessly.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
