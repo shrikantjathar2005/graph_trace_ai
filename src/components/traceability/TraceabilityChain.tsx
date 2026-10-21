@@ -12,7 +12,6 @@ import {
   Code2,
   CheckCircle2,
   BookOpen,
-  Info,
 } from "lucide-react";
 import { TraceabilityMatrixRow } from "@/types/traceability";
 import { AnyTraceEntity, EntityType } from "@/types/entities";
@@ -177,8 +176,8 @@ export function TraceabilityChain({
                             ? "TEST COVERAGE MISSING"
                             : `${t.label.toUpperCase()} LINK MISSING`}
                         </span>
-                        <Badge variant="danger" size="sm">
-                          GAP DETECTED
+                        <Badge variant={isOptionalClassTier ? "outline" : "danger"} size="sm">
+                          {isOptionalClassTier ? "OPTIONAL" : "GAP DETECTED"}
                         </Badge>
                       </div>
                       <p className="text-xs mt-1 text-zinc-300">

@@ -54,7 +54,7 @@ export interface ComponentEntity extends BaseEntity {
 export interface ModuleEntity extends BaseEntity {
   type: "module";
   filePath: string;
-  language: "TypeScript" | "Python" | "Java" | "Go" | "Rust";
+  language: "TypeScript" | "JavaScript" | "Python" | "Java" | "Go" | "Rust";
   loc: number;
   imports?: string[];
 }

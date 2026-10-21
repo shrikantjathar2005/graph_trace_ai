@@ -30,63 +30,78 @@ const entityIcons: Record<EntityType, React.ElementType> = {
 };
 
 const entityAccentBorders: Record<EntityType, string> = {
-  requirement: "hover:border-amber-500/70 border-l-amber-500",
-  architecture: "hover:border-purple-500/70 border-l-purple-500",
-  component: "hover:border-cyan-500/70 border-l-cyan-500",
-  module: "hover:border-indigo-500/70 border-l-indigo-500",
-  class: "hover:border-blue-500/70 border-l-blue-500",
-  method: "hover:border-emerald-500/70 border-l-emerald-500",
-  test: "hover:border-rose-500/70 border-l-rose-500",
-  documentation: "hover:border-teal-500/70 border-l-teal-500",
+  requirement: "border-l-amber-500 hover:border-amber-500/70",
+  architecture: "border-l-purple-500 hover:border-purple-500/70",
+  component: "border-l-cyan-500 hover:border-cyan-500/70",
+  module: "border-l-indigo-500 hover:border-indigo-500/70",
+  class: "border-l-blue-500 hover:border-blue-500/70",
+  method: "border-l-emerald-500 hover:border-emerald-500/70",
+  test: "border-l-rose-500 hover:border-rose-500/70",
+  documentation: "border-l-teal-400 hover:border-teal-400/70",
 };
 
+interface CustomEntityNodeData extends GraphNodeData {
+  isDimmed?: boolean;
+  isNeighborhood?: boolean;
+}
+
 export const CustomEntityNode = memo(({ data, selected, targetPosition, sourcePosition }: NodeProps) => {
-  const nodeData = data as unknown as GraphNodeData;
+  const nodeData = data as unknown as CustomEntityNodeData;
   const Icon = entityIcons[nodeData.type] || FileCode2;
   const accentBorder = entityAccentBorders[nodeData.type] || "border-l-zinc-500";
+  const isDimmed = nodeData.isDimmed ?? false;
+  const isNeighborhood = nodeData.isNeighborhood ?? false;
 
   return (
     <div
       className={cn(
-        "w-[260px] rounded-md border border-zinc-800 bg-zinc-950/95 backdrop-blur-md p-3 shadow-md transition-all duration-150 border-l-4 text-left group",
+        "w-[270px] min-h-[110px] rounded-lg border border-[#2A3547] bg-[#141B27]/95 backdrop-blur-md p-3.5 shadow-lg transition-all duration-150 border-l-[4px] text-left group cursor-pointer relative",
         accentBorder,
-        selected && "ring-2 ring-cyan-400 border-zinc-600 bg-zinc-900 shadow-cyan-950/30",
-        nodeData.highlighted && "ring-2 ring-amber-400/80 bg-zinc-900"
+        selected && "ring-2 ring-[#25C4B4] border-[#25C4B4] bg-[#192333] shadow-[0_0_24px_rgba(37,196,180,0.3)] scale-[1.02] z-20",
+        nodeData.highlighted && !selected && "ring-2 ring-amber-400/90 border-amber-400/80 bg-[#1e201c] shadow-[0_0_18px_rgba(245,158,11,0.25)]",
+        isNeighborhood && !selected && "ring-1 ring-[#25C4B4]/70 border-[#25C4B4]/50 shadow-[0_0_12px_rgba(37,196,180,0.15)]",
+        isDimmed && "opacity-20 grayscale filter transition-opacity duration-200 pointer-events-none"
       )}
     >
-      {/* React Flow Handles */}
+      {/* React Flow Connection Handles */}
       <Handle
         type="target"
         position={targetPosition || Position.Top}
-        className="!w-2 !h-2 !bg-zinc-600 !border-zinc-900 group-hover:!bg-cyan-400 transition-colors"
+        className="!w-2.5 !h-2.5 !bg-[#2A3547] !border-2 !border-[#10151F] group-hover:!bg-[#25C4B4] transition-colors"
       />
       <Handle
         type="source"
         position={sourcePosition || Position.Bottom}
-        className="!w-2 !h-2 !bg-zinc-600 !border-zinc-900 group-hover:!bg-cyan-400 transition-colors"
+        className="!w-2.5 !h-2.5 !bg-[#2A3547] !border-2 !border-[#10151F] group-hover:!bg-[#25C4B4] transition-colors"
       />
 
-      {/* Header with Entity Badge & ID */}
-      <div className="flex items-center justify-between gap-1 mb-1.5">
+      {/* Header: Entity Badge & ID */}
+      <div className="flex items-center justify-between gap-1 mb-2">
         <div className="flex items-center gap-1.5 min-w-0">
           <Badge variant={nodeData.type} size="sm" dot>
             {nodeData.type}
           </Badge>
         </div>
-        <span className="text-[9px] font-mono text-zinc-500 truncate max-w-[80px]">
+        <span className="text-[10px] font-mono text-zinc-400 bg-[#10151F]/80 px-1.5 py-0.5 rounded border border-[#2A3547]/80 truncate max-w-[95px]">
           {nodeData.id}
         </span>
       </div>
 
-      {/* Node Main Title */}
-      <div className="flex items-start gap-2 mt-1">
-        <Icon className="w-3.5 h-3.5 text-zinc-400 shrink-0 mt-0.5" />
+      {/* Title & Subtitle */}
+      <div className="flex items-start gap-2">
+        <Icon className="w-4 h-4 text-zinc-400 shrink-0 mt-0.5 group-hover:text-[#25C4B4] transition-colors" />
         <div className="min-w-0 flex-1">
-          <h4 className="text-xs font-semibold text-zinc-100 truncate group-hover:text-cyan-300 transition-colors">
+          <h4
+            className="text-[12.5px] font-semibold text-zinc-100 leading-snug line-clamp-2 group-hover:text-[#25C4B4] transition-colors"
+            title={nodeData.label}
+          >
             {nodeData.label}
           </h4>
           {nodeData.subtitle && (
-            <p className="text-[10px] text-zinc-400 font-mono truncate mt-0.5">
+            <p
+              className="text-[10px] text-zinc-400 font-mono truncate mt-1"
+              title={nodeData.subtitle}
+            >
               {nodeData.subtitle}
             </p>
           )}
@@ -95,18 +110,18 @@ export const CustomEntityNode = memo(({ data, selected, targetPosition, sourcePo
 
       {/* Metrics / Risk Footer */}
       {(nodeData.metrics || nodeData.risk) && (
-        <div className="mt-2.5 pt-2 border-t border-zinc-800/60 flex items-center justify-between text-[10px] font-mono text-zinc-400">
+        <div className="mt-2.5 pt-2 border-t border-[#2A3547]/60 flex items-center justify-between text-[10px] font-mono text-zinc-400">
           <div className="flex items-center gap-2">
-            {nodeData.metrics?.loc && (
+            {nodeData.metrics?.loc !== undefined && (
               <span>{nodeData.metrics.loc} LOC</span>
             )}
-            {nodeData.metrics?.methods && (
-              <span>{nodeData.metrics.methods} methods</span>
+            {nodeData.metrics?.methods !== undefined && (
+              <span>{nodeData.metrics.methods} meth</span>
             )}
-            {nodeData.metrics?.testsCount && (
+            {nodeData.metrics?.testsCount !== undefined && (
               <span>{nodeData.metrics.testsCount} tests</span>
             )}
-            {nodeData.metrics?.complexity && (
+            {nodeData.metrics?.complexity !== undefined && (
               <span>CC: {nodeData.metrics.complexity}</span>
             )}
           </div>
@@ -114,11 +129,11 @@ export const CustomEntityNode = memo(({ data, selected, targetPosition, sourcePo
           {nodeData.risk && (
             <span
               className={cn(
-                "flex items-center gap-1 font-semibold",
+                "flex items-center gap-1 font-semibold px-1 py-0.5 rounded text-[9px]",
                 nodeData.risk === "CRITICAL"
-                  ? "text-rose-400"
+                  ? "text-rose-400 bg-rose-950/40 border border-rose-800/40"
                   : nodeData.risk === "HIGH"
-                  ? "text-amber-400"
+                  ? "text-amber-400 bg-amber-950/40 border border-amber-800/40"
                   : "text-zinc-400"
               )}
             >

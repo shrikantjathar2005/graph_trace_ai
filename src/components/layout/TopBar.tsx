@@ -7,7 +7,7 @@ import { ProjectInfo } from "./ProjectSwitcher";
 
 export type ThemeId = "obsidian" | "golden-rush" | "monochrome" | "github-dark";
 
-export interface ThemeOption {
+export interface ThemeConfig {
   id: ThemeId;
   name: string;
   description: string;
@@ -16,14 +16,14 @@ export interface ThemeOption {
   accentColor: string;
 }
 
-export const themes: ThemeOption[] = [
+export const themes: ThemeConfig[] = [
   {
     id: "obsidian",
-    name: "Obsidian Blue",
-    description: "Apple dark glass with cobalt blue accents",
+    name: "Developer Dark",
+    description: "Charcoal workspace with precision teal accent",
     icon: "moon",
-    swatchGradient: "linear-gradient(135deg, #0b0f14 45%, #3b82f6 100%)",
-    accentColor: "#3b82f6",
+    swatchGradient: "linear-gradient(135deg, #10151f 45%, #25c4b4 100%)",
+    accentColor: "#25c4b4",
   },
   {
     id: "golden-rush",
@@ -55,12 +55,16 @@ interface TopBarProps {
   currentProject: ProjectInfo;
   openProjects: () => void;
   openCommand: () => void;
+  onToggleMobileSidebar?: () => void;
+  isSidebarCollapsed?: boolean;
+  onToggleSidebar?: () => void;
 }
 
 export function TopBar({
   currentProject,
   openProjects,
   openCommand,
+  onToggleMobileSidebar,
 }: TopBarProps) {
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncedRecently, setSyncedRecently] = useState(false);
@@ -95,8 +99,20 @@ export function TopBar({
 
   return (
     <header className="topbar">
-      {/* macOS Window Controls */}
-      <div className="window-controls" aria-label="Window controls">
+      {/* Mobile Hamburger Menu Toggle */}
+      {onToggleMobileSidebar && (
+        <button
+          type="button"
+          onClick={onToggleMobileSidebar}
+          className="control icon-button md:hidden text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+          aria-label="Open navigation menu"
+        >
+          <Icon name="menu" size={18} />
+        </button>
+      )}
+
+      {/* macOS Window Controls (Desktop only) */}
+      <div className="window-controls hidden lg:flex" aria-label="Window controls">
         <span className="window-close" title="Close" />
         <span className="window-minimize" title="Minimize" />
         <span className="window-expand" title="Expand" />
@@ -105,34 +121,55 @@ export function TopBar({
       {/* Brand */}
       <Link href="/" className="brand">
         <span className="brand-mark">
-          <Icon name="logo" size={23} />
+          <Icon name="logo" size={20} />
         </span>
-        <span>
+        <span className="hidden sm:inline">
           GraphTrace <b>AI</b>
         </span>
       </Link>
 
       {/* Repo Controls */}
-      <div className="repo-controls">
+      <div className="repo-controls flex items-center gap-1.5">
         <button
           type="button"
-          className="control select-control"
+          className="control select-control max-w-[150px] sm:max-w-[210px]"
           onClick={openProjects}
           title="Click to switch repository"
         >
-          <span className="repo-dot" />
-          <span>{currentProject.name}</span>
-          <Icon name="chevron" size={14} />
+          <span
+            className={`repo-dot shrink-0 ${
+              currentProject.isSample
+                ? "!bg-amber-400 !shadow-[0_0_8px_rgba(251,191,36,0.6)]"
+                : "!bg-[var(--success)] !shadow-[0_0_8px_rgba(52,211,153,0.6)]"
+            }`}
+          />
+          <span className="truncate">{currentProject.name}</span>
+          <Icon name="chevron" size={12} className="shrink-0" />
         </button>
+
+        <span
+          className={`hidden sm:inline-flex text-[9px] px-1.5 py-0.5 rounded border font-mono font-medium ${
+            currentProject.isSample
+              ? "border-amber-500/30 bg-amber-500/10 text-amber-300"
+              : "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
+          }`}
+          title={
+            currentProject.isSample
+              ? "Sample demonstration project with reference mock data"
+              : "User-imported local project stored in browser memory"
+          }
+        >
+          {currentProject.isSample ? "Sample" : "Imported"}
+        </span>
 
         <button
           type="button"
-          className="control select-control muted"
+          className="control select-control muted hidden md:flex max-w-[110px]"
           title="Git branch"
         >
-          <Icon name="branch" size={14} />
-          <span>{currentProject.branch}</span>
-          <Icon name="chevron" size={14} />
+          <Icon name="branch" size={13} className="shrink-0" />
+          <span className="truncate">{currentProject.branch}</span>
+          <Icon name="chevron" size={12} className="shrink-0" />
         </button>
       </div>
 
@@ -143,9 +180,10 @@ export function TopBar({
         onClick={openCommand}
         aria-label="Open command palette"
       >
-        <Icon name="search" size={16} />
-        <span>Search classes, methods, APIs, tests...</span>
-        <kbd>⌘ K</kbd>
+        <Icon name="search" size={15} />
+        <span className="hidden md:inline truncate">Search classes, methods, APIs, tests...</span>
+        <span className="md:hidden text-xs">Search...</span>
+        <kbd className="hidden sm:inline-block">⌘ K</kbd>
       </button>
 
       {/* Top Right Actions */}
@@ -163,7 +201,7 @@ export function TopBar({
               className="w-2.5 h-2.5 rounded-full shrink-0 shadow-sm transition-colors duration-300"
               style={{ background: currentThemeConfig.accentColor }}
             />
-            <span className="hidden md:inline">{currentThemeConfig.name}</span>
+            <span className="hidden lg:inline">{currentThemeConfig.name}</span>
             <Icon
               name="chevron"
               size={12}
@@ -231,7 +269,7 @@ export function TopBar({
         <button
           type="button"
           className={`control icon-button sync ${
-            isSyncing ? "animate-spin text-blue-400" : ""
+            isSyncing ? "animate-spin text-[var(--accent)]" : ""
           }`}
           onClick={handleSync}
           aria-label="Sync repository"
@@ -242,7 +280,7 @@ export function TopBar({
 
         <button
           type="button"
-          className="control icon-button notification"
+          className="control icon-button notification hidden sm:inline-flex"
           aria-label="Notifications"
           title="Notifications (1 unread impact alert)"
           onClick={() => {

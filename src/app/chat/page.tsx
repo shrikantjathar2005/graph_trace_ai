@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { apiService } from "@/services/api";
+import { useProject } from "@/context/ProjectContext";
 
 interface ChatMessage {
   id: string;
@@ -24,13 +25,31 @@ const initialMessages: ChatMessage[] = [
   },
 ];
 
-const samplePrompts = [
+const fintrackPrompts = [
   "Show tests mapped to payment processing",
   "Trace path from payment processing to audit ledger",
   "Which requirements are currently untested?",
 ];
 
+const importedPrompts = [
+  "Show entities connected to REQ-001",
+  "What modules realize requirements?",
+  "List tests mapped to code",
+];
+
+const unindexedPrompts = [
+  "Show indexing status",
+  "Which components are in this project?",
+];
+
 export default function ChatPage() {
+  const { currentProject } = useProject();
+  const samplePrompts =
+    currentProject.id === "fintrack"
+      ? fintrackPrompts
+      : currentProject.id.startsWith("imported")
+      ? importedPrompts
+      : unindexedPrompts;
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -50,7 +69,7 @@ export default function ChatPage() {
     setIsTyping(true);
 
     try {
-      const res = await apiService.queryNaturalLanguage(textToSend);
+      const res = await apiService.queryNaturalLanguage(textToSend, currentProject.id);
       if (res.success) {
         const aiMsg: ChatMessage = {
           id: (Date.now() + 1).toString(),
@@ -69,8 +88,13 @@ export default function ChatPage() {
   return (
     <PageContainer
       title="GraphRAG AI Assistant & Path Explainability"
-      description="Query your codebase using natural language. GraphTrace explains its reasoning with explicit graph traversal paths."
-      breadcrumbs={[{ label: "FinTrack Banking Core" }, { label: "AI Reasoning" }]}
+      description={`Query your codebase using natural language. GraphTrace explains its reasoning with explicit graph traversal paths for ${currentProject.name}.`}
+      badge={
+        <Badge variant={currentProject.isSample ? "outline" : "success"}>
+          {currentProject.isSample ? "Sample Model" : "Imported Workspace"}
+        </Badge>
+      }
+      breadcrumbs={[{ label: currentProject.name }, { label: "AI Reasoning" }]}
     >
       <div className="flex flex-col h-[calc(100vh-210px)] max-w-4xl mx-auto">
         {/* Sample Prompt Chips */}

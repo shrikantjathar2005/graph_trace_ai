@@ -2,6 +2,36 @@ import { KnowledgeGraphData } from "./graph";
 import { TraceabilityMatrixRow, TraceabilitySummaryStats } from "./traceability";
 import { ImpactAnalysisResult } from "./impact";
 import { EntityType } from "./entities";
+import type { ArchitectureRule, ValidationSummary } from "./rules";
+
+export type ProjectStatus =
+  | "completed"
+  | "completed_with_warnings"
+  | "indexing"
+  | "not_indexed"
+  | "failed";
+
+export interface ProjectInfo {
+  id: string;
+  name: string;
+  branch: string;
+  stack: string;
+  isSample: boolean;
+  sourceType: "sample" | "upload" | "git";
+  status: ProjectStatus;
+  importedAt?: string;
+  description?: string;
+  counts?: {
+    files?: number;
+    requirements?: number;
+    modules?: number;
+    methods?: number;
+    tests?: number;
+    relationships?: number;
+    unresolvedLinks?: number;
+  };
+  warnings?: string[];
+}
 
 export interface ProjectMetadata {
   id: string;
@@ -29,9 +59,26 @@ export interface ApiResponse<T> {
 }
 
 export interface GraphTraceApiService {
-  getProjectSummary(): Promise<ApiResponse<ProjectMetadata>>;
-  getKnowledgeGraph(filter?: { entityTypes?: EntityType[]; search?: string }): Promise<ApiResponse<KnowledgeGraphData>>;
-  getTraceabilityMatrix(): Promise<ApiResponse<{ rows: TraceabilityMatrixRow[]; summary: TraceabilitySummaryStats }>>;
-  getImpactAnalysis(targetId: string, changeType?: string): Promise<ApiResponse<ImpactAnalysisResult>>;
-  queryNaturalLanguage(prompt: string): Promise<ApiResponse<{ answer: string; reasoningPath: string[]; confidence: number }>>;
+  getProjectSummary(projectId?: string): Promise<ApiResponse<ProjectMetadata>>;
+  getKnowledgeGraph(filter?: {
+    projectId?: string;
+    entityTypes?: EntityType[];
+    search?: string;
+  }): Promise<ApiResponse<KnowledgeGraphData>>;
+  getTraceabilityMatrix(projectId?: string): Promise<
+    ApiResponse<{ rows: TraceabilityMatrixRow[]; summary: TraceabilitySummaryStats }>
+  >;
+  getImpactAnalysis(
+    targetId: string,
+    changeType?: string,
+    projectId?: string
+  ): Promise<ApiResponse<ImpactAnalysisResult>>;
+  queryNaturalLanguage(
+    prompt: string,
+    projectId?: string
+  ): Promise<ApiResponse<{ answer: string; reasoningPath: string[]; confidence: number }>>;
+  validateArchitectureRules(
+    projectId?: string,
+    rules?: ArchitectureRule[]
+  ): Promise<ApiResponse<ValidationSummary>>;
 }

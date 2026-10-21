@@ -30,7 +30,10 @@ export type IconName =
   | "arrow"
   | "close"
   | "palette"
-  | "check";
+  | "check"
+  | "menu"
+  | "chevronLeft"
+  | "chevronRight";
 
 const iconPaths: Record<IconName, ReactNode> = {
   logo: (
@@ -183,6 +186,15 @@ const iconPaths: Record<IconName, ReactNode> = {
     </>
   ),
   check: <path d="M20 6 9 17l-5-5" />,
+  menu: (
+    <>
+      <line x1="4" x2="20" y1="12" y2="12" />
+      <line x1="4" x2="20" y1="6" y2="6" />
+      <line x1="4" x2="20" y1="18" y2="18" />
+    </>
+  ),
+  chevronLeft: <path d="m15 18-6-6 6-6" />,
+  chevronRight: <path d="m9 18 6-6-6-6" />,
 };
 
 export function Icon({

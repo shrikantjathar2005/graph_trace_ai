@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { FileText, CheckCircle2, AlertCircle, HelpCircle, ShieldCheck, Activity } from "lucide-react";
+import { FileText, CheckCircle2, AlertCircle, HelpCircle, ShieldCheck } from "lucide-react";
 import { TraceabilitySummaryStats } from "@/types/traceability";
 import { Card, CardContent } from "@/components/ui/Card";
 

@@ -5,20 +5,13 @@ import Link from "next/link";
 import {
   ExternalLink,
   ArrowLeft,
-  FileText,
-  Boxes,
-  Layers,
-  FileCode2,
-  Binary,
-  Code2,
-  CheckCircle2,
-  BookOpen,
   ShieldCheck,
   Check,
   AlertTriangle,
+  Flame,
 } from "lucide-react";
 import { TraceabilityMatrixRow } from "@/types/traceability";
-import { AnyTraceEntity, EntityType, RequirementEntity, MethodEntity, TestEntity, ClassEntity } from "@/types/entities";
+import { AnyTraceEntity, MethodEntity, TestEntity, ClassEntity } from "@/types/entities";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
@@ -71,16 +64,29 @@ export function TraceabilityInspector({
           </span>
         </div>
 
-        {/* Primary Action: Open in Graph */}
-        <Link href={`/graph?entity=${currentEntity.id}`}>
-          <Button
-            size="xs"
-            variant="outline"
-            icon={<ExternalLink className="w-3 h-3 text-cyan-400" />}
-          >
-            Open in Graph
-          </Button>
-        </Link>
+        {/* Primary Actions: Open in Graph & Simulate Impact */}
+        <div className="flex items-center gap-1.5">
+          <Link href={`/impact?entity=${encodeURIComponent(currentEntity.id)}`}>
+            <Button
+              size="xs"
+              variant="outline"
+              icon={<Flame className="w-3 h-3 text-rose-400" />}
+              title="Simulate upstream/downstream blast radius for this entity"
+            >
+              Impact
+            </Button>
+          </Link>
+          <Link href={`/graph?entity=${encodeURIComponent(currentEntity.id)}`}>
+            <Button
+              size="xs"
+              variant="outline"
+              icon={<ExternalLink className="w-3 h-3 text-[#25C4B4]" />}
+              title="Locate and focus entity in Knowledge Graph Explorer"
+            >
+              Graph
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Content */}

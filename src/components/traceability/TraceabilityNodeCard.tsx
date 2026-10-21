@@ -11,7 +11,6 @@ import {
   Code2,
   CheckCircle2,
   BookOpen,
-  ArrowUpRight,
   ExternalLink,
 } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
@@ -42,6 +41,7 @@ export function TraceabilityNodeCard({
   onSelect,
   relationLabel,
 }: TraceabilityNodeCardProps) {
+  void relationLabel;
   const Icon = entityIcons[entity.type] || FileCode2;
 
   // Derive status badge

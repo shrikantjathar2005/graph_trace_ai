@@ -3,8 +3,8 @@ import "./globals.css";
 import { AppShell } from "@/components/layout/AppShell";
 
 export const metadata: Metadata = {
-  title: "GraphTrace AI — Knowledge Graph & Traceability Engine",
-  description: "Apple-inspired glassmorphism software architecture intelligence and traceability engine",
+  title: "GraphTrace AI — Software Engineering Intelligence & Knowledge Graph",
+  description: "Understand codebases through connected evidence: requirements, source code, architecture, and tests in a persistent Software Knowledge Graph.",
 };
 
 export default function RootLayout({
@@ -28,7 +28,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen bg-[#070a0f] text-[#f5f7fa] flex items-center justify-center font-sans antialiased overflow-hidden">
+      <body className="min-h-screen bg-[var(--bg)] text-[var(--text-primary)] font-sans antialiased overflow-x-hidden">
         <AppShell>{children}</AppShell>
       </body>
     </html>

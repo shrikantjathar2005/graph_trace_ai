@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { Search, Filter, Layers, CheckCircle2, AlertCircle, HelpCircle } from "lucide-react";
+import { Search } from "lucide-react";
 import { TraceabilityMatrixRow, CoverageStatus } from "@/types/traceability";
 import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";

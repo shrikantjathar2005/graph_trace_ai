@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Icon, IconName } from "@/components/ui/Icons";
+import { useProject } from "@/context/ProjectContext";
 
 type NodeName =
   | "Frontend"
@@ -277,10 +278,22 @@ export default function OverviewPage() {
   const router = useRouter();
   const [mode, setMode] = useState("Graph");
   const [selected, setSelected] = useState<NodeName>("Auth Service");
+  const { currentProject } = useProject();
   const [inspectorTab, setInspectorTab] = useState("Overview");
   const [evidenceVisible, setEvidenceVisible] = useState(true);
   const [graphSearch, setGraphSearch] = useState("");
   const [zoomLevel, setZoomLevel] = useState("1:1");
+
+  const dynamicKpis: Array<[IconName, string | number, string]> =
+    currentProject.id === "fintrack"
+      ? kpis
+      : [
+          ["file", currentProject.counts?.files ?? 0, "Files Scanned"],
+          ["layers", currentProject.counts?.modules ?? 0, "Modules"],
+          ["code", currentProject.counts?.methods ?? 0, "Functions"],
+          ["trace", currentProject.counts?.requirements ?? 0, "Requirements"],
+          ["map", currentProject.counts?.relationships ?? 0, "Relationships"],
+        ];
 
   const current = nodeDetailsMap[selected];
 
@@ -289,16 +302,21 @@ export default function OverviewPage() {
   const handleZoomOut = () => setZoomLevel("0.75x");
 
   return (
-    <>
+    <div className="overview-container">
       {/* Central Workspace */}
       <main className="workspace">
         {/* Workspace Toolbar */}
         <div className="workspace-toolbar">
           <div>
-            <h1>System Architecture Map</h1>
-            <span className="live-status">
-              <i />
-              Repository synced 2 min ago
+            <h1 className="flex items-center gap-2">
+              <span>System Architecture Map</span>
+              <span className="text-xs font-normal text-[var(--text-muted)] truncate max-w-[220px]">
+                · {currentProject.name}
+              </span>
+            </h1>
+            <span className={`live-status ${currentProject.isSample ? "text-amber-400" : "text-emerald-400"}`}>
+              <i className={currentProject.isSample ? "!bg-amber-400 !shadow-[0_0_6px_rgba(251,191,36,0.6)]" : "!bg-[var(--success)] !shadow-[0_0_6px_rgba(52,211,153,0.6)]"} />
+              {currentProject.isSample ? "Reference Sample Model (Demonstration Data)" : "Local Indexed Workspace (Parsed In-Browser)"}
             </span>
           </div>
 
@@ -325,7 +343,7 @@ export default function OverviewPage() {
 
         {/* 5 Glass KPI Cards */}
         <div className="kpi-row">
-          {kpis.map(([icon, value, label]) => (
+          {dynamicKpis.map(([icon, value, label]) => (
             <div className="kpi-card" key={label}>
               <span className="kpi-icon">
                 <Icon name={icon} size={16} />
@@ -773,6 +791,6 @@ export default function OverviewPage() {
           </div>
         </section>
       </div>
-    </>
+    </div>
   );
 }

@@ -2,29 +2,39 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0b0f14;
-  --foreground: #f5f7fa;
-  --bg: #0b0f14;
-  --glass: rgba(31, 39, 50, 0.32);
-  --glass-elevated: rgba(50, 59, 72, 0.46);
-  --glass-selected: rgba(59, 130, 246, 0.18);
-  --surface-solid: #11161d;
-  --text-primary: #f5f7fa;
-  --text-secondary: #a8b0bb;
-  --text-muted: #6f7885;
-  --border: rgba(255, 255, 255, 0.1);
-  --border-strong: rgba(255, 255, 255, 0.16);
-  --primary: #3b82f6;
-  --primary-bright: #60a5fa;
-  --primary-deep: #2563eb;
-  --success: #34d399;
-  --warning: #fbbf24;
-  --danger: #f87171;
+  color-scheme: dark;
+  --bg: #10151F;
+  --surface-1: #171F2C;
+  --surface-2: #1D2736;
+  --surface-hover: #263347;
+  --border: #2A3547;
+  --border-strong: #3D4C63;
+  --text-primary: #E8EDF4;
+  --text-secondary: #9BA8BA;
+  --text-muted: #758399;
+  --accent: #25C4B4;
+  --accent-hover: #35D5C4;
+  --info: #6B9FE8;
+  --warning: #D99A36;
+  --danger: #E36B73;
+  --success: #47B881;
+  --focus-ring: #79B7FF;
+
+  /* Aliases & Compatibility tokens */
+  --background: var(--bg);
+  --foreground: var(--text-primary);
+  --surface-solid: var(--surface-1);
+  --glass: rgba(23, 31, 44, 0.72);
+  --glass-elevated: rgba(29, 39, 54, 0.88);
+  --glass-selected: rgba(37, 196, 180, 0.16);
+  --primary: var(--accent);
+  --primary-bright: var(--accent-hover);
+  --primary-deep: #1ea294;
   --radius-sm: 8px;
   --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 18px;
-  --font-sans: -apple-system, BlinkMacSystemFont, "Inter", "Geist", system-ui, sans-serif;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 }
 
@@ -34,14 +44,14 @@
 
 body {
   margin: 0;
-  min-width: 1180px;
-  background: radial-gradient(circle at 14% 18%, #263b5e 0, transparent 32%),
-              radial-gradient(circle at 88% 88%, #172b47 0, transparent 36%),
-              #070a0f;
+  min-width: 320px;
+  background: radial-gradient(circle at 14% 18%, #171F2C 0, transparent 35%),
+              radial-gradient(circle at 88% 88%, #1D2736 0, transparent 40%),
+              var(--bg);
   color: var(--text-primary);
   font-family: var(--font-sans);
   font-size: 13px;
-  overflow: hidden;
+  overflow-x: hidden;
   color-scheme: dark;
 }
 
@@ -53,26 +63,36 @@ button {
   color: inherit;
 }
 
-/* Apple-Inspired Glassmorphic Desktop Shell */
+/* Flexible Application Shell */
 .app-shell {
-  width: calc(100vw - 20px);
-  height: calc(100vh - 20px);
-  min-height: 700px;
-  margin: 10px;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  margin: 0;
   position: relative;
-  display: grid;
-  grid-template: 64px minmax(0, 1fr) 224px / 196px minmax(640px, 1fr) 292px;
-  background: radial-gradient(circle at 20% 15%, rgba(70, 110, 170, 0.11), transparent 32%),
-              radial-gradient(circle at 80% 80%, rgba(60, 100, 160, 0.07), transparent 35%),
-              rgba(8, 12, 18, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 16px;
-  box-shadow: 0 38px 100px rgba(0, 0, 0, 0.62),
-              0 2px 10px rgba(0, 0, 0, 0.35),
-              inset 0 1px rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(34px) saturate(130%);
-  -webkit-backdrop-filter: blur(34px) saturate(130%);
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
   overflow: hidden;
+}
+
+.app-body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.app-content-area {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
 }
 
 .control {
@@ -119,18 +139,16 @@ button {
 
 /* TopBar Header */
 .topbar {
-  grid-column: 1 / 4;
-  height: 64px;
+  height: 56px;
   padding: 0 16px;
   z-index: 20;
   display: flex;
   align-items: center;
-  gap: 17px;
-  background: linear-gradient(180deg, rgba(46, 55, 67, 0.43), rgba(22, 28, 37, 0.34));
-  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.14);
-  backdrop-filter: blur(48px) saturate(155%);
-  -webkit-backdrop-filter: blur(48px) saturate(155%);
+  gap: 12px;
+  background: var(--surface-1);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
 }
 
 .window-controls {
@@ -308,15 +326,22 @@ kbd {
 
 /* Sidebar */
 .sidebar {
-  grid-row: 2 / 4;
-  padding: 16px 11px 13px;
+  width: 232px;
+  flex-shrink: 0;
+  height: 100%;
+  padding: 14px 10px 12px;
   display: flex;
   flex-direction: column;
-  border-right: 1px solid rgba(255, 255, 255, 0.13);
-  background: linear-gradient(110deg, rgba(45, 54, 67, 0.27), rgba(15, 21, 29, 0.2));
-  box-shadow: inset -1px 0 rgba(0, 0, 0, 0.14);
-  backdrop-filter: blur(46px) saturate(145%);
-  -webkit-backdrop-filter: blur(46px) saturate(145%);
+  border-right: 1px solid var(--border);
+  background: var(--surface-1);
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: width 180ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar.collapsed {
+  width: 64px;
+  padding: 14px 6px 12px;
 }
 
 .sidebar nav {
@@ -326,29 +351,40 @@ kbd {
 }
 
 .nav-item {
-  height: 36px;
+  height: 38px;
   width: 100%;
   border-radius: var(--radius-sm);
   justify-content: flex-start;
-  padding: 0 11px;
-  gap: 11px;
-  font-size: 12px;
+  padding: 0 10px;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
   text-decoration: none;
+  transition: all 140ms ease;
+  white-space: nowrap;
 }
 
 .nav-item:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--surface-hover);
+  color: var(--text-primary);
 }
 
 .nav-item.active {
-  color: white;
-  background: linear-gradient(180deg, rgba(70, 145, 255, 0.42), rgba(37, 99, 235, 0.32));
-  border: 1px solid rgba(113, 181, 255, 0.4);
-  box-shadow: 0 5px 14px rgba(16, 72, 166, 0.16), inset 0 1px rgba(255, 255, 255, 0.12);
+  color: var(--text-primary);
+  background: rgba(37, 196, 180, 0.12);
+  border: 1px solid rgba(37, 196, 180, 0.35);
+  box-shadow: 0 0 12px rgba(37, 196, 180, 0.08);
 }
 
-.nav-item.active .icon {
-  color: var(--primary-bright);
+.nav-item.active .icon,
+.nav-item.active svg {
+  color: var(--accent);
+}
+
+.sidebar.collapsed .nav-item {
+  justify-content: center;
+  padding: 0;
 }
 
 .nav-rule {
@@ -364,10 +400,71 @@ kbd {
   gap: 3px;
 }
 
-/* Workspace */
-.workspace {
+/* Overview Container & Sub-Panels */
+.overview-container {
+  display: grid;
+  grid-template: minmax(0, 1fr) 224px / minmax(0, 1fr) 292px;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.overview-container > .workspace {
+  grid-column: 1;
+  grid-row: 1;
+  min-height: 0;
+  padding: 14px 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  overflow: hidden;
+}
+
+.overview-container > .inspector {
   grid-column: 2;
+  grid-row: 1;
+  min-height: 0;
+  margin: 14px 14px 12px 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.overview-container > .bottom-dock {
+  grid-column: 1 / 3;
   grid-row: 2;
+  padding: 0 14px 14px;
+  display: grid;
+  grid-template-columns: 1.18fr 0.9fr 0.78fr;
+  gap: 10px;
+  min-height: 0;
+}
+
+@media (max-width: 1024px) {
+  .overview-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto;
+  }
+  .overview-container > .workspace {
+    overflow: visible;
+    flex-shrink: 0;
+  }
+  .overview-container > .inspector {
+    margin: 0 14px 14px 14px;
+    flex-shrink: 0;
+  }
+  .overview-container > .bottom-dock {
+    grid-template-columns: 1fr;
+    height: auto;
+    flex-shrink: 0;
+  }
+}
+
+.workspace {
   min-height: 0;
   padding: 14px 14px 12px;
   display: flex;
@@ -750,8 +847,6 @@ marker path {
 
 /* Inspector Right Panel */
 .inspector {
-  grid-column: 3;
-  grid-row: 2;
   min-height: 0;
   margin: 14px 14px 12px 0;
   border-radius: var(--radius-lg);
@@ -929,8 +1024,6 @@ dd {
 
 /* Bottom Dock Panels */
 .bottom-dock {
-  grid-column: 2 / 4;
-  grid-row: 3;
   padding: 0 14px 14px;
   display: grid;
   grid-template-columns: 1.18fr 0.9fr 0.78fr;
@@ -1444,6 +1537,27 @@ code {
 /* ==========================================================================
    Golden Rush Theme — Luxurious Apple Glassmorphism + Champagne Gold Palette
    ========================================================================== */
+
+/* ==========================================================================
+   Obsidian Developer Dark Theme (design.md Default)
+   ========================================================================== */
+[data-theme="obsidian"] {
+  --bg: #10151F;
+  --surface-1: #171F2C;
+  --surface-2: #1D2736;
+  --surface-hover: #263347;
+  --border: #2A3547;
+  --border-strong: #3D4C63;
+  --text-primary: #E8EDF4;
+  --text-secondary: #9BA8BA;
+  --text-muted: #758399;
+  --accent: #25C4B4;
+  --accent-hover: #35D5C4;
+  --primary: #25C4B4;
+  --primary-bright: #35D5C4;
+  --primary-deep: #1ea294;
+}
+
 [data-theme="golden-rush"] {
   --bg: #0c0a07;
   --background: #0c0a07;

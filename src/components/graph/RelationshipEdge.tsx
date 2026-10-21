@@ -10,14 +10,22 @@ import {
 import { cn } from "@/lib/utils";
 
 const relationshipColorClasses: Record<string, string> = {
-  REALIZES: "text-purple-400 border-purple-800/60 bg-purple-950/80",
-  CONTAINS: "text-zinc-400 border-zinc-700 bg-zinc-900/90",
-  IMPLEMENTS: "text-cyan-400 border-cyan-800/60 bg-cyan-950/80",
-  CALLS: "text-emerald-400 border-emerald-800/60 bg-emerald-950/80",
-  VERIFIES: "text-rose-400 border-rose-800/60 bg-rose-950/80",
-  DOCUMENTS: "text-teal-400 border-teal-800/60 bg-teal-950/80",
-  DEPENDS_ON: "text-amber-400 border-amber-800/60 bg-amber-950/80",
+  REALIZES: "text-purple-300 border-purple-700/80 bg-purple-950/90 hover:border-purple-400",
+  CONTAINS: "text-zinc-300 border-zinc-700 bg-zinc-900/90 hover:border-zinc-400",
+  IMPLEMENTS: "text-cyan-300 border-cyan-700/80 bg-cyan-950/90 hover:border-cyan-400",
+  CALLS: "text-emerald-300 border-emerald-700/80 bg-emerald-950/90 hover:border-emerald-400",
+  VERIFIES: "text-rose-300 border-rose-700/80 bg-rose-950/90 hover:border-rose-400",
+  DOCUMENTS: "text-teal-300 border-teal-700/80 bg-teal-950/90 hover:border-teal-400",
+  DEPENDS_ON: "text-amber-300 border-amber-700/80 bg-amber-950/90 hover:border-amber-400",
 };
+
+interface RelationshipEdgeData {
+  relationship?: string;
+  confidence?: number;
+  isDimmed?: boolean;
+  isHighlighted?: boolean;
+  onEdgeClick?: (edgeId: string) => void;
+}
 
 export function RelationshipEdge({
   id,
@@ -29,6 +37,7 @@ export function RelationshipEdge({
   targetPosition,
   style = {},
   markerEnd,
+  selected,
   data,
 }: EdgeProps) {
   const [edgePath, labelX, labelY] = getSmoothStepPath({
@@ -41,18 +50,27 @@ export function RelationshipEdge({
     borderRadius: 8,
   });
 
-  const edgeData = data as { relationship?: string; confidence?: number } | undefined;
+  const edgeData = data as RelationshipEdgeData | undefined;
   const relationship = edgeData?.relationship || "DEPENDS_ON";
-  const badgeStyle = relationshipColorClasses[relationship] || "text-zinc-400 border-zinc-700 bg-zinc-900";
+  const badgeStyle = relationshipColorClasses[relationship] || "text-zinc-300 border-zinc-700 bg-zinc-900";
+  const isDimmed = edgeData?.isDimmed ?? false;
+  const isHighlighted = (edgeData?.isHighlighted ?? false) || Boolean(selected);
+
+  const strokeColor = isHighlighted ? "#25C4B4" : "#4A5568";
+  const strokeWidth = isHighlighted ? 2.5 : 1.5;
 
   return (
     <>
       <BaseEdge
+        id={id}
         path={edgePath}
         markerEnd={markerEnd}
         style={{
-          stroke: "#3f3f46",
-          strokeWidth: 1.5,
+          stroke: strokeColor,
+          strokeWidth,
+          opacity: isDimmed ? 0.15 : 1,
+          filter: isHighlighted ? "drop-shadow(0 0 6px rgba(37, 196, 180, 0.6))" : undefined,
+          transition: "all 0.15s ease",
           ...style,
         }}
       />
@@ -62,18 +80,26 @@ export function RelationshipEdge({
             position: "absolute",
             transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
             pointerEvents: "all",
+            opacity: isDimmed ? 0.15 : 1,
+            zIndex: isHighlighted ? 15 : 1,
           }}
-          className="nodrag nopan"
+          className="nodrag nopan transition-opacity duration-200"
         >
-          <div
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              edgeData?.onEdgeClick?.(id);
+            }}
             className={cn(
-              "px-1.5 py-0.5 rounded text-[9px] font-mono font-semibold uppercase tracking-wider border shadow-xs transition-transform hover:scale-105 select-none",
-              badgeStyle
+              "px-2 py-0.5 rounded text-[9.5px] font-mono font-semibold uppercase tracking-wider border shadow-md transition-all duration-150 select-none cursor-pointer",
+              badgeStyle,
+              isHighlighted && "ring-2 ring-[#25C4B4] scale-110 shadow-[0_0_12px_rgba(37,196,180,0.4)]"
             )}
-            title={edgeData?.confidence ? `Confidence: ${Math.round(edgeData.confidence * 100)}%` : undefined}
+            title={edgeData?.confidence !== undefined ? `${relationship} (Confidence: ${Math.round(edgeData.confidence * 100)}%)` : relationship}
           >
             {relationship}
-          </div>
+          </button>
         </div>
       </EdgeLabelRenderer>
     </>

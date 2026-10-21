@@ -1,7 +1,6 @@
 import { TraceabilityMatrixRow, TraceabilitySummaryStats } from "@/types/traceability";
 import { mockGraphNodes } from "./mockGraphData";
 import {
-  RequirementEntity,
   ArchitectureEntity,
   ComponentEntity,
   ModuleEntity,

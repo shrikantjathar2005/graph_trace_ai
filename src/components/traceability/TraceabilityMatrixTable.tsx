@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Check, Minus, CheckCircle2 } from "lucide-react";
+import { Check, Minus } from "lucide-react";
 import { TraceabilityMatrixRow } from "@/types/traceability";
 import { Badge } from "@/components/ui/Badge";
 import { cn } from "@/lib/utils";
@@ -17,7 +17,7 @@ export function TraceabilityMatrixTable({
   selectedReqId,
   onSelectRequirement,
 }: TraceabilityMatrixTableProps) {
-  const renderCell = (count: number, label?: string) => {
+  const renderCell = (count: number) => {
     if (count > 0) {
       return (
         <span className="inline-flex items-center gap-1 font-mono text-emerald-400 font-semibold">
