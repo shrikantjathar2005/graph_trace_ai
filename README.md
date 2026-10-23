@@ -1,6 +1,6 @@
 # GraphTrace AI
 
-Explore the deployed website: [https://shrikantjathar2005.github.io/graph_trace_ai/](https://shrikantjathar2005.github.io/graph_trace_ai/)
+[![Open the live GraphTrace AI website](https://img.shields.io/badge/OPEN%20LIVE%20WEBSITE-GraphTrace%20AI-0969da?style=for-the-badge)](https://shrikantjathar2005.github.io/graph_trace_ai/)
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
