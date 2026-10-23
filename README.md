@@ -1,6 +1,7 @@
 # GraphTrace AI
 
 [![Open the live GraphTrace AI website](https://img.shields.io/badge/OPEN%20LIVE%20WEBSITE-GraphTrace%20AI-0969da?style=for-the-badge)](https://shrikantjathar2005.github.io/graph_trace_ai/)
+[![Open the Studio concept](https://img.shields.io/badge/VIEW%20STUDIO%20CONCEPT-GraphTrace%20AI-8250df?style=for-the-badge)](https://shrikantjathar2005.github.io/graph_trace_ai/graphtrace-studio-concept.html)
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
