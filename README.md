@@ -39,6 +39,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 The interactive studio concept (sample repository data) is included as a static page at:
 
+- Live GitHub Pages preview: `https://shrikantjathar2005.github.io/graph_trace_ai/graphtrace-studio-concept.html`
 - Local development: `http://localhost:3000/graphtrace-studio-concept.html`
 - Source: [`public/graphtrace-studio-concept.html`](public/graphtrace-studio-concept.html)
 
