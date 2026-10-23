@@ -38,3 +38,13 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## GraphTrace Studio concept preview
+
+The interactive studio concept (sample repository data) is included as a static page at:
+
+- Live GitHub Pages preview: `https://shrikantjathar2005.github.io/graph_trace_ai/graphtrace-studio-concept.html`
+- Local development: `http://localhost:3000/graphtrace-studio-concept.html`
+- Source: [`public/graphtrace-studio-concept.html`](public/graphtrace-studio-concept.html)
+
+Start the Next.js development server with `npm run dev` to open it locally. When this app is deployed, the same path is available from the deployment's base URL.
